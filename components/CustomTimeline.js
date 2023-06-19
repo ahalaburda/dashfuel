@@ -1,7 +1,5 @@
 import generateFakeData from "@/services/generateFakeData";
 import moment from "moment";
-import { useRouter } from "next/router";
-
 import { useEffect, useState } from "react";
 import Timeline from "react-calendar-timeline";
 import "react-calendar-timeline/lib/Timeline.css";
@@ -23,7 +21,6 @@ const keys = {
 Object.freeze(keys);
 
 export default function CustomTimeline() {
-  const router = useRouter();
   const [isReady, setIsReady] = useState(false);
   const [defaultTimeStart, setDefaultTimeStart] = useState();
   const [defaultTimeEnd, setDefaultTimeEnd] = useState();
@@ -47,13 +44,12 @@ export default function CustomTimeline() {
     setIsReady(true);
   }, []);
 
-
   function handleClose() {
     setShowCreateModal(false);
     setShowEditModal(false);
-  };
+  }
 
-  function handleItemMove (itemId, dragTime, newGroupOrder) {
+  function handleItemMove(itemId, dragTime, newGroupOrder) {
     const group = groups[newGroupOrder];
     const updateItems = items.map((item) =>
       item.id === itemId
@@ -66,9 +62,9 @@ export default function CustomTimeline() {
     );
     setItems(updateItems);
     console.log("Moved", itemId, dragTime, newGroupOrder);
-  };
+  }
 
-  function handleItemResize (itemId, time, edge) {
+  function handleItemResize(itemId, time, edge) {
     const updateItems = items.map((item) =>
       item.id === itemId
         ? Object.assign({}, item, {
@@ -79,14 +75,14 @@ export default function CustomTimeline() {
     );
     setItems(updateItems);
     console.log("Resized", itemId, time, edge);
-  };
+  }
 
-  function onItemCreate (groupId, time) {
+  function onItemCreate(groupId, time) {
     setCreateNewItem({ groupId, time });
     setShowCreateModal(true);
-  };
+  }
 
-  function handleItemCreate (data) {
+  function handleItemCreate(data) {
     const newItem = {
       id: items.length + 1,
       group: createNewItem.groupId,
@@ -96,13 +92,13 @@ export default function CustomTimeline() {
     };
     setItems([...items, newItem]);
     setCreateNewItem(null);
-  };
+  }
 
-  function onItemEdit (itemId, e, time) {
+  function onItemEdit(itemId) {
     const item = items.find((item) => item.id === itemId);
     setEditItem(item);
     setShowEditModal(true);
-  };
+  }
 
   const handleItemEdit = (itemId, data) => {
     const updatedItems = items.map((item) =>
@@ -115,17 +111,17 @@ export default function CustomTimeline() {
           }
         : item
     );
-    setItems([...updatedItems]); // Use a new array reference
+    setItems([...updatedItems]);
     setEditItem(null);
   };
 
-  function handleItemDelete (itemId){
+  function handleItemDelete(itemId) {
     const updateItems = items.filter((item) => item.id !== itemId);
     setItems(updateItems);
     setEditItem(null);
-  };
+  }
 
-  if (!isReady) return null
+  if (!isReady) return null;
   return (
     <div data-testid="CustomTimeline">
       <Timeline
